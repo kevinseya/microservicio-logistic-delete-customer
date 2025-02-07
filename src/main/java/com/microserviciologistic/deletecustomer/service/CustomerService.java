@@ -15,17 +15,27 @@ import java.util.UUID;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final WebSocketClientService webSocketClientService;
+
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, WebSocketClientService webSocketClientService) {
         this.customerRepository = customerRepository;
+        this.webSocketClientService = webSocketClientService;
+
     }
 
     public void deleteCustomer(UUID customerId) {
         try {
+            System.out.println(customerId);
             Optional<Customer> existingCustomer = customerRepository.findById(customerId);
             if (existingCustomer.isPresent()) {
-                customerRepository.deleteById(customerId);
+                Customer customer = existingCustomer.get();
+                System.out.println(customer.getId());
+                customerRepository.softDeleteUser(customerId);
+                customerRepository.save(customer);
+                webSocketClientService.sendEvent("DELETE", customerId);
+
             } else {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer with ID " + customerId + " not found");
             }
