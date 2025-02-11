@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.microserviciologistic</groupId>
-	<artifactId>deletecustomer</artifactId>
+	<artifactId>delete-customer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>delete-customer</name>
 	<description>delete-customer</description>
